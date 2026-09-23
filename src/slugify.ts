@@ -5,10 +5,15 @@
  * acentos removidos, qualquer sequência de caracteres não alfanuméricos virando um
  * único hífen, sem hífen sobrando nas pontas, e entrada vazia produzindo string
  * vazia.
- *
- * TODO: implementar. Hoje devolve a entrada sem alteração, então a especificação
- * dos testes falha.
  */
 export function slugify(input: string): string {
-  return input;
+  return (
+    input
+      // NFD separa a letra base dos diacríticos, que são então descartados.
+      .normalize("NFD")
+      .replace(/\p{M}/gu, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  );
 }
